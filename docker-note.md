@@ -57,6 +57,89 @@ docker run -it image-name
 ```
 
 ## Dockerfile 语法
+### FROM 
+> 尽量使用官方的 image 作为 base image （比较安全）
 
 ```
+# 制作 base image
+FROM scratch 
+
+# 使用 base image 
+FROM centos 
+FROM UBUNTU:14.04
+```
+
+### LABEL
+> Metadata 不可少
+
+```
+LABEL maintainer="caojiacan0618@gmail.com"
+LABEL version="1.0"
+LABEL description="This is description"
+```
+
+### RUN
+> 为了美观，复杂的RUN请用反斜线换行<br>
+> 避免无用分层，合并多条命令成一行
+
+```
+# 反斜线换行
+RUN yum update && yum install -y vim \
+	python-dev
+
+# 注意清理 cache
+RUN apt-get update && apt-get install -y perl \
+	pwgen --no-install-recommends && rm -rf \
+	/var/lib/apt/lists/*
+
+RUN /bin/bash -c 'source $HOME/.bashrc; echo $HOME'
+```
+
+### WORKDIR
+> 作用类似 cd 命令<br>
+> 用 WORKDIR，不要使用 RUN cd<br>
+> 尽量使用绝对目录
+
+```
+WORKDIR /root
+
+# 如果没有会自动创建 test 目录
+# 以下三行将会输出 /test/demo
+WORKDIR /test
+WORKDIR demo
+RUN pwd
+```
+
+### ADD and COPY
+> 大部分情况，COPY 优于 ADD<br>
+> ADD 除了 COPY 还有额外的功能（解压）<br>
+> 添加远程文件/目录请使用 curl 或者 wget
+
+```
+# 将当前目录的 hello 文件添加到 image 的根目录下
+ADD hello /
+
+# 添加到根目录，ADD 会执行解压缩， COPY 不会执行解压缩
+ADD test.tar.get /
+
+# 讲当前目录的 hello 文件，添加到 /root/test/ 目录下
+# 生成的容器中会存在一个 /root/test/hello 文件
+WORKDIR /root
+ADD hello test/
+
+# 以下效果同上
+WORKDIR /root
+COPY hello test/
+```
+
+### ENV
+> 尽量使用 ENV 增加可维护性 
+
+```
+# 设置常量 MYSQL_VERSION 为 5.6 
+ENV MYSQL_VERSION 5.6 
+
+# 引用常量
+RUN apt-get install -y mysql-server="${MYSQL_VERSION}" \
+	&& rm -rf /var/lib/apt/lists/*
 ```
