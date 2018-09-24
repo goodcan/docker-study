@@ -26,23 +26,23 @@ docker history image-ID
 
 ```
 # 显示所有正在运行的容器
-docker container ls
+docker ps = docker container ls
 # 显示所有容器（包括推出的容器）
-docker container ls -a 
+docker ps -a
 
 # docker rm = docker container rm
 # 单个单个删除 容器
 docker rm container-ID
 
 # 显示所有容器的 ID，'-q' 只显示容器 ID 号
-docker container ls -aq
+docker ps -aq
 # 删除多个容器
-docker rm $(docker container ls -aq)
+docker rm $(docker ps -aq)
 
 # 显示已经退出的容器 ID
-docker container ls -f "status=exited" -q
+docker ps -f "status=exited" -q
 # 删除已经退出的容器
-docker rm $(docker container ls -f "status=exited" -q)
+docker rm $(docker ps -f "status=exited" -q)
 
 # 根据一个 container 的修改创建新的 image （不推荐使用该方式，建议使用 Dockerfile 的形式）
 docker commit = docker container commit
@@ -142,4 +142,40 @@ ENV MYSQL_VERSION 5.6
 # 引用常量
 RUN apt-get install -y mysql-server="${MYSQL_VERSION}" \
 	&& rm -rf /var/lib/apt/lists/*
+```
+
+### CMD and ENTRYPOINT
+> RUN：执行命令并创建新的 Image Layer<br>
+> CMD：设置容器启动后默认执行的命令和参数<br>
+> ENTRYPOINT：设置容器启动时运行的命令
+
+```
+# 以下通过 docker run [image] 输出 hello $name 并不是想要结果
+FROM centos
+ENV name Docker
+ENTRYPOINT echo "hello $name"
+
+# 以下通过 docker run [image] 输出 hello Docker 正是想要的结果
+FROM centos
+ENV name Docker
+ENTRYPOINT ["/bin/bash", "-c", "echo hello $name"]
+
+# cmd 补充说明
+# 容器启动时默认执行的命令
+# 如果 docker run 制定了其他命令，CMD 命令被忽略
+# 如果定义多个 CMD，只有最后一个会执行
+# 以下通过 docker run [image] 输出 hello Docker 正是想要的结果
+FROM centos
+ENV name Docker
+CMD echo "hello $name"
+
+# entrypoint 补充说明
+# 让容器以应用程序或者服务的形式运行
+# 不会被忽略，一定执行
+# 最佳实践：写一个 shell 脚本作为 entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 27017
+CMD ["mongod"]
 ```
