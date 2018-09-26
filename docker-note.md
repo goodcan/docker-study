@@ -179,3 +179,31 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 27017
 CMD ["mongod"]
 ```
+
+## 创建私有 Docker Hub
+> 使用 [Docker Registry](https://docs.docker.com/registry/)
+
+### [基本使用方法](https://docs.docker.com/registry/#basic-commands)
+```
+# 从 Docker Hub 拉取官方 registry image
+docker pull registry
+# 启动一个 registry container
+docker run -d -p 5000:5000 --restart always --name registry registry:2
+# 从 Docker Hub 拉取一个 ubuntu image
+docker pull ubuntu
+# 修改 ubuntu repository 名称为私有 Docker Hub 启动的主机 IP + PORT + / + name
+docker tag ubuntu localhost:5000/ubuntu
+# 推送 image 到私有 Docker Hub 上
+docker push localhost:5000/ubuntu
+```
+
+### 校验
+```
+# 删除 localhost:5000/ubuntu 镜像
+docker rmi localhost:5000/ubuntu
+# 重新从私有 Docker Hub 上拉取
+docker pull localhost:5000/ubuntu
+```
+
+### [常用 HTTP API V2 接口](https://docs.docker.com/registry/spec/api/)
+* GET /v2/_catalogu 显示已有 image
