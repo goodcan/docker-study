@@ -30,9 +30,13 @@ docker ps = docker container ls
 # 显示所有容器（包括推出的容器）
 docker ps -a
 
+# 停止运行的容器
+# docker stop = docker container stop
+docker stop container-ID/container-name
+
 # 单个单个删除容器 - 容器必须是退出状态
 # docker rm = docker container rm
-docker rm container-ID
+docker rm container-ID/container-name
 
 # 显示所有容器的 ID，'-q' 只显示容器 ID 号
 docker ps -aq
@@ -47,6 +51,14 @@ docker rm $(docker ps -f "status=exited" -q)
 # 根据一个 container 的修改创建新的 image （不推荐使用该方式，建议使用 Dockerfile 的形式）
 docker commit = docker container commit
 docker commit old-container-namae new-image-name
+
+# 查看容器详细信息
+# docker inspect = docker contaienr inspect
+docker inspect container-ID
+
+# 查看容器运行时产生的日志
+# docker logs = docker container logs
+docker logs container-ID
 ```
 
 ## docker run 相关操作
@@ -56,6 +68,13 @@ docker run -it image-name
 
 # 后台执行
 docker run -d image-name
+
+# 定义名字运行容器
+# 定义名字的容器是唯一的
+docker run -d --name=demo image-name
+docker stop demo
+docekr rm demo
+docker start demo
 ```
 
 ## docker exec 相关操作
