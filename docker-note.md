@@ -30,8 +30,8 @@ docker ps = docker container ls
 # 显示所有容器（包括推出的容器）
 docker ps -a
 
+# 单个单个删除容器 - 容器必须是退出状态
 # docker rm = docker container rm
-# 单个单个删除 容器
 docker rm container-ID
 
 # 显示所有容器的 ID，'-q' 只显示容器 ID 号
@@ -50,7 +50,6 @@ docker commit old-container-namae new-image-name
 ```
 
 ## docker run 相关操作
-
 ```
 # 交互式运行一个 image
 docker run -it image-name
@@ -59,6 +58,16 @@ docker run -it image-name
 docker run -d image-name
 ```
 
+## docker exec 相关操作
+```
+# 进入一个运行中的 container 中
+# 交互式进入后执行 /bin/bash 进行命令操作
+docker exec -it container-ID /bin/bash
+# 交互式进入后执行 python 进入 python 解释器
+docker exec -it container-ID python
+# 交互式进入后执行 ip a 查看运行中的容器 IP 地址
+docker exec -it container-ID ip a
+```
 ## Dockerfile 语法
 ### FROM 
 > 尽量使用官方的 image 作为 base image （比较安全）
@@ -216,3 +225,4 @@ docker pull localhost:5000/ubuntu
 
 ### [常用 HTTP API V2 接口](https://docs.docker.com/registry/spec/api/)
 * GET /v2/_catalogu 显示已有 image
+	
