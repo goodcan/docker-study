@@ -54,6 +54,9 @@ docker commit old-container-namae new-image-name
 ```
 # 交互式运行一个 image
 docker run -it image-name
+
+# 后台执行
+docker run -d image-name
 ```
 
 ## Dockerfile 语法
