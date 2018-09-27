@@ -180,6 +180,12 @@ EXPOSE 27017
 CMD ["mongod"]
 ```
 
+### EXPOSE
+```
+# 使容器对外暴露 5000 端口
+EXPOSE 5000
+```
+
 ## 创建私有 Docker Hub
 > 使用 [Docker Registry](https://docs.docker.com/registry/)
 
