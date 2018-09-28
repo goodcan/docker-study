@@ -209,6 +209,13 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 27017
 CMD ["mongod"]
+
+# CMD 和 ENTRYPOINT 结合使用
+ENTRYPOINT ["/usr/bin/ls"]
+CMD []
+# 创建一个以上两个语句组成的 image 后执行
+docker run iamge --> 输出当前目录文件
+docker run iamge -a --> 输出当前目录所有文件
 ```
 
 ### EXPOSE
