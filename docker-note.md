@@ -251,4 +251,23 @@ docker pull localhost:5000/ubuntu
 
 ### [常用 HTTP API V2 接口](https://docs.docker.com/registry/spec/api/)
 * GET /v2/_catalogu 显示已有 image
-	
+
+## 容器物理资源限制
+### 内存 - Memory
+> 只设置 memory 那么 memory-swap 默认等于 memory，即占用两倍设置的 memory 
+
+```
+# 设置 memory 200M 和 memory-swap 200M 一个 400M 内存
+# docker run --memory=200M = docker run -m 200M
+docker run --memory=200M image-name
+```
+
+### CPU
+> --cpu-shares 并不是设置 CPU 个数，而是设置相对权重  
+> CPU 个数多的容器会优先去使用资源的 CPU
+> 在主机 CPU 跑满时，会根据设置的 CPU 个数呈现一个百分比关系
+
+```
+# docker run --cpu-shares=5 = docker run -c 5
+docker run --cpu-shares=5 image-name
+```
