@@ -264,8 +264,8 @@ docker run --memory=200M image-name
 
 ### CPU
 > --cpu-shares 并不是设置 CPU 个数，而是设置相对权重  
-> CPU 个数多的容器会优先去使用资源的 CPU
-> 在主机 CPU 跑满时，会根据设置的 CPU 个数呈现一个百分比关系
+> CPU 个数多的容器会优先去使用资源的 CPU  
+> 在主机 CPU 跑满时，会根据设置的 CPU 个数呈现一个百分比关系  
 
 ```
 # docker run --cpu-shares=5 = docker run -c 5
