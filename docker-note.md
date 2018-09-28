@@ -257,7 +257,7 @@ docker pull localhost:5000/ubuntu
 > 只设置 memory 那么 memory-swap 默认等于 memory，即占用两倍设置的 memory 
 
 ```
-# 设置 memory 200M 和 memory-swap 200M 一个 400M 内存
+# 设置 memory 200M 和 memory-swap 200M 一共最多可使用 400M 内存
 # docker run --memory=200M = docker run -m 200M
 docker run --memory=200M image-name
 ```
