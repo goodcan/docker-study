@@ -271,3 +271,16 @@ docker run --memory=200M image-name
 # docker run --cpu-shares=5 = docker run -c 5
 docker run --cpu-shares=5 image-name
 ```
+
+## docker-machine 操作
+```
+# 列出所有docker 虚拟机
+docker-machine ls
+
+# 创建一个 docker 虚拟机
+docker-machine create docker-machine-name
+
+# 删除一个 docker 虚拟机
+docker-machine rm docker-machine-name
+```
+
