@@ -280,6 +280,9 @@ docker-machine ls
 # 创建一个 docker 虚拟机
 docker-machine create docker-machine-name
 
+# 登录一个 docker 虚拟机
+docker-machine ssh docker-machine-name
+
 # 删除一个 docker 虚拟机
 docker-machine rm docker-machine-name
 ```
