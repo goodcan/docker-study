@@ -75,6 +75,12 @@ docker run -d --name=demo image-name
 docker stop demo
 docekr rm demo
 docker start demo
+
+# 类似网络 NDS ，通过名称连接容器之间的网络
+docker run -d --name test1 image-name
+dokcer run -d --name test2 --link test1 image-name
+# 在 test2 容器中可以直接使用容器 test1 来访问网络
+docker exec -it test2 ping test1
 ```
 
 ## docker exec 相关操作
