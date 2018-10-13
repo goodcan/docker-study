@@ -81,6 +81,10 @@ docker run -d --name test1 image-name
 dokcer run -d --name test2 --link test1 image-name
 # 在 test2 容器中可以直接使用容器 test1 来访问网络
 docker exec -it test2 ping test1
+
+# 启动时指明使用的网络
+# 新的网络可以通过 docker network create 来创建
+docker run --network network-name image-name
 ```
 
 ## docker exec 相关操作
@@ -297,11 +301,20 @@ docker-machine rm docker-machine-name
 ```
 
 ## docker network
+> 连接到自己创建的网络中的容器，默认已经相互 link，可以直接使用容器名称来访问
+
 ```
 # 显示本机所有的 docker 网络
 docke network ls
 
 # 显示使用对应 docker 网络的容器
 docker network inspect docker-network-id/docker-nwtwork-name
+
+# 创建一个 docker 网咯
+# docker network create -d 驱动名称 新的网络名称
+docker  network create -d bridage my-bridage
+
+# 将容器连接到指定的网络
+docker network connect network-name container-name
 ```
 
