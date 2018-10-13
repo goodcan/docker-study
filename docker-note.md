@@ -313,7 +313,7 @@ docke network ls
 docker network inspect docker-network-id/docker-nwtwork-name
 ```
 
-### bridge
+### bridge 网络
 > 连接到自己创建的 bridge 网络中的容器，默认已经相互 link，可以直接使用容器名称来访问
 
 ```
@@ -325,3 +325,18 @@ docker  network create -d bridage my-bridage
 docker network connect network-name container-name
 ```
 
+### none 网络
+> 安全性高
+
+```
+# 谁都不能访问的容器
+docker run --network none image-name
+```
+
+### host 网络
+> 容器出现端口冲突
+
+```
+# 和主机共享一套网络
+docker run --network host image-name
+```
