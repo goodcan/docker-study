@@ -95,6 +95,7 @@ docker run -p 80:80 image-name
 docker run --name demo --link redis -e REDIS_HOST=redis image-name
 
 # 指定 volume 
+# 在 Dockerfile 中定义 VOLUME ["/var/lib/mysql"]
 # 指定从 mysql 镜像中创建的容器的 volume 在 /var/lib/mysql 中
 docker run -v mysql:/var/lib/mysql --name mysql1 mysql
 ```
@@ -368,6 +369,27 @@ docker volume ls
 docker volume rm volume-name
 # 查看 volume 详细信息
 docker volume inspect volume-name
+```
+
+##### data volume 方式
+> 需要在 Dockerfile 中定义好存储的目录
+
+```
+# 在 Dockerfile 中定义 VOLUME ["/var/lib/mysql"]
+# 指定从 mysql 镜像中创建的容器的 volume 在 /var/lib/mysql 中
+docker run -v mysql:/var/lib/mysql --name mysql1 mysql
+```
+
+##### Bind Mouting 方式
+> 不需要在 Dockerfile 中定义   
+> 目录映射的关系
+> Centos 7 下 使用 chcon -Rt httpd_sys_content_t . 关闭文本安全  
+> 或者使用 docker run --privileged=true 加特权
+
+```
+# 定义主机目录和容器目录
+# -v 主机目录:容器目录
+docker run -v /home/aaa:/root/aaa image-name
 ```
 
 #### 基于 plugin 的 volume
