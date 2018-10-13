@@ -382,7 +382,7 @@ docker run -v mysql:/var/lib/mysql --name mysql1 mysql
 
 ##### Bind Mouting 方式
 > 不需要在 Dockerfile 中定义   
-> 目录映射的关系
+> 目录映射的关系  
 > Centos 7 下 使用 chcon -Rt httpd_sys_content_t . 关闭文本安全  
 > 或者使用 docker run --privileged=true 加特权
 
@@ -394,3 +394,84 @@ docker run -v /home/aaa:/root/aaa image-name
 
 #### 基于 plugin 的 volume
 支持第三方的存储方案，比如 NAS，aws
+
+## docker compose 相关操作 - 默认使用 docker-compose.yml 文件名
+- Docker Compose 是一个工具  
+- 这个工具可以通过一个 yml 文件定义多容器的 docker 应用  
+- 通过一条命令就可以根据 yml 文件的定义去创建或者管理这个多容器  
+
+### Services
+> 一个 services 代表一个 container，这个 container 可以从 dockerhub 的 image 来创建，或者从本地的 Dockerfile build 出来的 image 来创建  
+>  Service 的启动类似 container run，我们可以给其指定 network 和 volume，所以可以给 service 指定 network 和 volume 的应用  
+
+```
+# 以下作用和 docker run -d --network back-tier -v db-data:/var/lib/postgresql/data/ postgres:9.4 命令相同
+services:
+  db:
+    image: postgres:9.4
+	volumes:
+	  - "db-data:/var/lib/postgresql/data"
+	networks:
+	  - back-tier
+# 以下作用是从 ./worker 目录中的 Dockerfile 文件创建的 image 连接 db 和 reids 并连接在 back-tier 网络中
+services:
+  worker:
+    build: ./worker
+	links:
+	  - db
+	  - redis
+	networks:
+	  - back-tier
+```
+
+### Networks
+```
+# 以下作用和 docker network create -d bridge front-tier && docker network create -d bridge back-tier 命令相同
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
+```
+
+### Volumes
+```
+# 以下作用和 docker volume create db-data 命令相同
+volumes:
+  db-data:
+```
+
+### 完整的例子
+···
+version: '3'
+
+services:
+
+  wordpress:
+    image: wordpress
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_PASSWORD: root
+    networks:
+      - my-bridge
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - my-bridge
+
+volumes:
+  mysql-data:
+
+networks:
+  my-bridge:
+    driver: bridge
+···
+
