@@ -344,3 +344,9 @@ docker run --network none image-name
 # 和主机共享一套网络
 docker run --network host image-name
 ```
+
+### overlay 网络 - 实现多机通信
+> 该网络基于 VXLAN 方式实现类似隧道的功能
+
+使用 overlay 网络加分布式存储 etcd 实现
+
