@@ -350,3 +350,11 @@ docker run --network host image-name
 
 使用 overlay 网络加分布式存储 etcd 实现
 
+## 持久化存储和数据共享
+### 持久化数据的方案
+#### 基于本地文件系统的 volume
+可以在执行 Docker create 或 Docker run 时，通过 -v 参数将主机的目录作为容器的数据卷。这部分功能便是基于本地文系统的 volume 管理
+* 受管理的 data volume，由 docker 后台自动创建
+* 绑定挂载的 volume，具体挂载位置可以由用户指定
+#### 基于 plugin 的 volume
+支持第三方的存储方案，比如 NAS，aws
