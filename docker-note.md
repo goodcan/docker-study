@@ -89,6 +89,10 @@ docker run --network network-name image-name
 # 端口映射
 # 将容器的 80 端口映射到 docker 主机的 80 端口
 docker run -p 80:80 image-name
+
+# 设置环境变量
+# 设置 demo 的环境 REDIS_HOST 的值为 redis 容器的 IP 地址
+docker run --name demo --link redis -e REDIS_HOST=redis image-name
 ```
 
 ## docker exec 相关操作
