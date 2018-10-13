@@ -85,6 +85,10 @@ docker exec -it test2 ping test1
 # 启动时指明使用的网络
 # 新的网络可以通过 docker network create 来创建
 docker run --network network-name image-name
+
+# 端口映射
+# 将容器的 80 端口映射到 docker 主机的 80 端口
+docker run -p 80:80 image-name
 ```
 
 ## docker exec 相关操作
@@ -301,16 +305,19 @@ docker-machine rm docker-machine-name
 ```
 
 ## docker network
-> 连接到自己创建的网络中的容器，默认已经相互 link，可以直接使用容器名称来访问
-
 ```
 # 显示本机所有的 docker 网络
 docke network ls
 
 # 显示使用对应 docker 网络的容器
 docker network inspect docker-network-id/docker-nwtwork-name
+```
 
-# 创建一个 docker 网咯
+### bridge
+> 连接到自己创建的 bridge 网络中的容器，默认已经相互 link，可以直接使用容器名称来访问
+
+```
+# 创建一个 docker birdge 网咯
 # docker network create -d 驱动名称 新的网络名称
 docker  network create -d bridage my-bridage
 
