@@ -93,6 +93,10 @@ docker run -p 80:80 image-name
 # 设置环境变量
 # 设置 demo 的环境 REDIS_HOST 的值为 redis 容器的 IP 地址
 docker run --name demo --link redis -e REDIS_HOST=redis image-name
+
+# 指定 volume 
+# 指定从 mysql 镜像中创建的容器的 volume 在 /var/lib/mysql 中
+docker run -v mysql:/var/lib/mysql --name mysql1 mysql
 ```
 
 ## docker exec 相关操作
@@ -356,5 +360,15 @@ docker run --network host image-name
 可以在执行 Docker create 或 Docker run 时，通过 -v 参数将主机的目录作为容器的数据卷。这部分功能便是基于本地文系统的 volume 管理
 * 受管理的 data volume，由 docker 后台自动创建
 * 绑定挂载的 volume，具体挂载位置可以由用户指定
+
+```
+# 查看所有 docker 管理的 volume
+docker volume ls
+# 删除一个 volume
+docker volume rm volume-name
+# 查看 volume 详细信息
+docker volume inspect volume-name
+```
+
 #### 基于 plugin 的 volume
 支持第三方的存储方案，比如 NAS，aws
