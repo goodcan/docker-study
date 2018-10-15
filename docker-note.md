@@ -512,7 +512,7 @@ docker-compose build
 > 先初始化 manager 节点  
 > worker 节点使用生成的 token 进行添加
 
-` ``
+```
 # 进入 manager 节点创建 swarm manager
 docker swarm init --advertise-addr=swarm-manager-ip-addr
 
@@ -521,7 +521,33 @@ docker swarm join --token swarm-manager-join-token swarm-mananger-ip:swarm-manag
 
 # 在 manager 节点管理 join token
 docker swarm join-token manager 
+```
 
+### node 命令
+```
 # 显示当前 swarm 节点
 docker node ls
+```
+
+### service 命令
+> 在 swarm 模式下一般不用 run 而使用 service
+
+mode - 模式
+- replicated 可以可以横向扩展 
+
+```
+# 创建一个 service，及运行一个 container 并运行
+docker service create --name demo iamge
+
+# 查看 service
+docker service ls
+
+# 删除 service
+docker service rm service-name
+
+# 查看具体 service 内容
+docker service ps service-name
+
+# 扩展 service
+docker service scale service-name=num
 ```
