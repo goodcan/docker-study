@@ -477,15 +477,33 @@ networks:
 ```
 
 ### docker-compose 命令行工具使用方法
+> 用于本地开发，不适用于生产环境
+
 ```
 # 前台启动 container
 docker-compose up
+
 # 后台启动 container
 docker-compose up -d
+
 # 删除停止的 container
 docker-compose down
+
 # 查看运行的 docker compose
 docker-compose ps
-# 指定启动 容器的个数
+
+# 指定启动容器的个数
 docker-compose up --scale container-name=num
+
+# 预构建 Dockerfile 
+docker-compose build
 ```
+
+## Swarm mode - 容器编排
+- 管理更多容器
+- 方便横向扩展
+- 容器 down 了自动恢复
+- 更新容器而不影响业务
+- 监控追踪容器
+- 调度容器的创建
+- 保护隐私数据
