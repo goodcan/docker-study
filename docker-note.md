@@ -395,12 +395,13 @@ docker run -v /home/aaa:/root/aaa image-name
 #### 基于 plugin 的 volume
 支持第三方的存储方案，比如 NAS，aws
 
-## docker compose 相关操作 - 默认使用 docker-compose.yml 文件名
+## docker-compose 相关操作 - 默认使用 docker-compose.yml 文件名
 - Docker Compose 是一个工具  
 - 这个工具可以通过一个 yml 文件定义多容器的 docker 应用  
 - 通过一条命令就可以根据 yml 文件的定义去创建或者管理这个多容器  
 
-### Services
+### yml 文件编写规则
+#### Services
 > 一个 services 代表一个 container，这个 container 可以从 dockerhub 的 image 来创建，或者从本地的 Dockerfile build 出来的 image 来创建  
 >  Service 的启动类似 container run，我们可以给其指定 network 和 volume，所以可以给 service 指定 network 和 volume 的应用  
 
@@ -424,7 +425,7 @@ services:
 	  - back-tier
 ```
 
-### Networks
+#### Networks
 ```
 # 以下作用和 docker network create -d bridge front-tier && docker network create -d bridge back-tier 命令相同
 networks:
@@ -434,15 +435,15 @@ networks:
     driver: bridge
 ```
 
-### Volumes
+#### Volumes
 ```
 # 以下作用和 docker volume create db-data 命令相同
 volumes:
   db-data:
 ```
 
-### 完整的例子
-···
+#### 完整的例子
+```
 version: '3'
 
 services:
@@ -473,5 +474,18 @@ volumes:
 networks:
   my-bridge:
     driver: bridge
-···
+```
 
+### docker-compose 命令行工具使用方法
+```
+# 前台启动 container
+docker-compose up
+# 后台启动 container
+docker-compose up -d
+# 删除停止的 container
+docker-compose down
+# 查看运行的 docker compose
+docker-compose ps
+# 指定启动 容器的个数
+docker-compose up --scale container-name=num
+```
