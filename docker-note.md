@@ -507,3 +507,21 @@ docker-compose build
 - 监控追踪容器
 - 调度容器的创建
 - 保护隐私数据
+
+### 初始化
+> 先初始化 manager 节点  
+> worker 节点使用生成的 token 进行添加
+
+` ``
+# 进入 manager 节点创建 swarm manager
+docker swarm init --advertise-addr=swarm-manager-ip-addr
+
+# 进入 worker 节点加入 swarm manager
+docker swarm join --token swarm-manager-join-token swarm-mananger-ip:swarm-manager-port
+
+# 在 manager 节点管理 join token
+docker swarm join-token manager 
+
+# 显示当前 swarm 节点
+docker node ls
+```
