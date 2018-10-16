@@ -532,9 +532,6 @@ docker node ls
 ### service 命令
 > 在 swarm 模式下一般不用 run 而使用 service
 
-mode - 模式
-- replicated 可以可以横向扩展 
-
 ```
 # 创建一个 service，及运行一个 container 并运行
 docker service create --name demo iamge
@@ -551,3 +548,10 @@ docker service ps service-name
 # 扩展 service
 docker service scale service-name=num
 ```
+
+mode - 模式
+- replicated 可以可以横向扩展 
+
+Routing Mesh 的两种体现
+- Internal - Container 和 Container 之间的访问通过 overlay 网络 （通过 VIP 虚拟 IP）
+- Ingress - 如果服务有绑定端口，则此服务可以通过任意 swarm 节点的相应接口访问
