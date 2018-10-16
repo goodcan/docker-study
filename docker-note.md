@@ -551,7 +551,45 @@ docker service scale service-name=num
 
 mode - 模式
 - replicated 可以可以横向扩展 
+- global 不能做横向扩展
 
 Routing Mesh 的两种体现
 - Internal - Container 和 Container 之间的访问通过 overlay 网络 （通过 VIP 虚拟 IP）
 - Ingress - 如果服务有绑定端口，则此服务可以通过任意 swarm 节点的相应接口访问
+
+### docker-compose.yml 中配置 deploy
+> [官方文档](https://docs.docker.com/compose/compose-file/#deploy)
+
+```
+deploy:
+
+  # 定义模式为 replicated 可以横行扩展
+  mode: replicated
+
+  # 定义横向扩展 3 个容器
+  replicas: 3
+
+  # 指定容器运行的节点
+  constraints:
+    - node.role == manager 
+
+  # 配置重启方案
+  restart_policy:
+    # 条件
+    condition: on-failure
+	# 延迟
+	delay: 5s
+	# 最大尝试次数
+	max_attempts: 3
+
+  # 更新配置
+  update_config:
+    # 同时更新个数
+    parallelism: 2
+	# 延迟
+    delay: 10s
+	# 顺序
+    order: stop-first
+```
+
+### docker stack 部署 docker-compose.yml
