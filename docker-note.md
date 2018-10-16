@@ -414,6 +414,7 @@ services:
 	  - "db-data:/var/lib/postgresql/data"
 	networks:
 	  - back-tier
+
 # 以下作用是从 ./worker 目录中的 Dockerfile 文件创建的 image 连接 db 和 reids 并连接在 back-tier 网络中
 services:
   worker:
@@ -455,6 +456,11 @@ services:
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_PASSWORD: root
+
+	# 依赖配置，指明先启动依赖的容器
+    depends_on:
+	  - mysql
+
     networks:
       - my-bridge
 
@@ -558,7 +564,8 @@ Routing Mesh 的两种体现
 - Ingress - 如果服务有绑定端口，则此服务可以通过任意 swarm 节点的相应接口访问
 
 ### docker-compose.yml 中配置 deploy
-> [官方文档](https://docs.docker.com/compose/compose-file/#deploy)
+> [官方文档](https://docs.docker.com/compose/compose-file/#deploy)  
+> 网络默认使用 overlay
 
 ```
 deploy:
@@ -607,4 +614,20 @@ docker stack ps stack-name
 
 # 查看概括的 service 运行情况
 docker stack service stack-name
+```
+
+### 可视化工具
+
+```
+services:
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 ```
