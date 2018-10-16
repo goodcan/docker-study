@@ -568,10 +568,12 @@ deploy:
 
   # 定义横向扩展 3 个容器
   replicas: 3
-
-  # 指定容器运行的节点
-  constraints:
-    - node.role == manager 
+	
+  # 配置运行位置
+  placement:
+    # 指定容器运行的节点
+    constraints:
+      - node.role == manager 
 
   # 配置重启方案
   restart_policy:
@@ -593,3 +595,16 @@ deploy:
 ```
 
 ### docker stack 部署 docker-compose.yml
+```
+# 启动stack
+docker stack deploy stack-name --compose-file=docker-compose.yml
+
+# 查看所有 stack
+docker stack ls
+
+# 查看具体的 stack 运行详情
+docker stack ps stack-name
+
+# 查看概括的 service 运行情况
+docker stack service stack-name
+```
