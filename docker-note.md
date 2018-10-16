@@ -631,3 +631,19 @@ services:
       placement:
         constraints: [node.role == manager]
 ```
+
+## docker Secret Management
+- 存在 Swarm Manager 节点 Raft database 里
+- Secret可以 assign 给一个 service，这个 service 就能看到这个 secret
+- 在 container 内部 Secret 看起来像文件，但是实际是在内存中
+
+```
+# 创建 secret - 文件方式
+docker secret create secret-name secret-file
+
+# 创建 secret - 命令行 echo 方式
+echo "passwod" | docker secret create secret-name -
+
+# 查看 secret - 源文件删除了也可以查看到
+docker secret ls
+```
