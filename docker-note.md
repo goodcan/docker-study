@@ -602,6 +602,8 @@ deploy:
 ```
 
 ### docker stack 部署 docker-compose.yml
+> stack 一次性启动多个 service
+
 ```
 # 启动stack
 # -c == -compose-file
@@ -615,6 +617,21 @@ docker stack ps stack-name
 
 # 查看概括的 service 运行情况
 docker stack service stack-name
+```
+
+### update service
+#### 单个 service 更新
+```
+docker service create -d --name server -p 8080:5000 image-name:1.0
+
+# 使用 scale 扩展
+docker service scale server=2
+
+# 更新 service 版本
+dockeer service update --image image-name:2.0 server
+
+# 更新 service 端口
+dockeer service update --publish-rm 8080:5000 --publish-add 8888:5000 server
 ```
 
 ### 可视化工具
@@ -655,7 +672,6 @@ docker secret ls
 # 创建 service 时指明 sercet
 # 在容器中 /run/secrets/ 中存放传入的 secret
 docker service create --secret secret-name iamge-name
-
 
 # 在 docker-compose.yml 文件中使用
 # 前提是已经创建了 secret
