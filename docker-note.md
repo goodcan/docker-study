@@ -604,6 +604,7 @@ deploy:
 ### docker stack 部署 docker-compose.yml
 ```
 # 启动stack
+# -c == -compose-file
 docker stack deploy stack-name --compose-file=docker-compose.yml
 
 # 查看所有 stack
@@ -637,6 +638,7 @@ services:
 - Secret可以 assign 给一个 service，这个 service 就能看到这个 secret
 - 在 container 内部 Secret 看起来像文件，但是实际是在内存中
 
+### secret 管理
 ```
 # 创建 secret - 文件方式
 docker secret create secret-name secret-file
@@ -646,4 +648,36 @@ echo "passwod" | docker secret create secret-name -
 
 # 查看 secret - 源文件删除了也可以查看到
 docker secret ls
+```
+
+### 使用生成的 secret
+```
+# 创建 service 时指明 sercet
+# 在容器中 /run/secrets/ 中存放传入的 secret
+docker service create --secret secret-name iamge-name
+
+
+# 在 docker-compose.yml 文件中使用
+# 前提是已经创建了 secret
+services:
+  app:
+    image: xxx
+	secrets:
+	  - secret-name
+    environment:
+	  SECRET_DEMO:/run/secrets/secret-name
+
+# 在 docker-compose.yml 文件中创建和使用
+# 不太推荐使用，相对上面一种安全性较低
+services:
+  app:
+    image: xxx
+	secrets:
+	  - secret-name
+    environment:
+	  SECRET_DEMO:/run/secrets/secret-name
+
+secrets:
+  secret-name:
+    file: secret-file-path
 ```
