@@ -2,114 +2,200 @@
 
 ## docker image 相关操作
 
+- 显示所有 image
+
 ```
-# 显示所有 image
 docker images = docker image ls
+```
 
-# 拉去 registry 中的已有 image
+- 拉去 registry 中的已有 image
+
+```
 docker pull image-name
+```
 
-# 删除 image
-docker rmi = docker image rm
+- 删除 image
+
+```
+# docker rmi = docker image rm
 docker rmi image-ID
+```
 
-# 根据一个 Dockerfile 构建一个 image （推荐使用该方式来创建，方便分享给他人使用） 
+- 根据一个 Dockerfile 构建一个 image （推荐使用该方式来创建，方便分享给他人使用） 
+
+```
 docker build = docker image build
-# 制定文件 Dockerfile 创建 image
-docker build -t create-image-name Dockerfile-path
+```
 
-# 查看 image 的创建历史
+- 制定文件 Dockerfile 创建 image
+
+```
+docker build -t create-image-name Dockerfile-path
+```
+
+- 查看 image 的创建历史
+
+```
 docker history image-ID
 ```
 
 ## docker container 相关操作
 
-```
-# 显示所有正在运行的容器
-docker ps = docker container ls
-# 显示所有容器（包括推出的容器）
-docker ps -a
+- 显示所有正在运行的容器
 
-# 停止运行的容器
+```
+docker ps = docker container ls
+```
+
+- 显示所有容器（包括推出的容器）
+
+```
+docker ps -a
+```
+
+- 停止运行的容器
+
+```
 # docker stop = docker container stop
 docker stop container-ID/container-name
+```
 
-# 单个单个删除容器 - 容器必须是退出状态
+- 单个单个删除容器 - 容器必须是退出状态
+
+```
 # docker rm = docker container rm
 docker rm container-ID/container-name
+```
 
-# 显示所有容器的 ID，'-q' 只显示容器 ID 号
+- 显示所有容器的 ID，'-q' 只显示容器 ID 号
+
+```
 docker ps -aq
-# 删除多个容器
+```
+
+- 删除多个容器
+
+```
 docker rm $(docker ps -aq)
+```
 
-# 显示已经退出的容器 ID
+- 显示已经退出的容器 ID
+
+```
 docker ps -f "status=exited" -q
-# 删除已经退出的容器
+```
+
+- 删除已经退出的容器
+
+```
 docker rm $(docker ps -f "status=exited" -q)
+```
 
-# 根据一个 container 的修改创建新的 image （不推荐使用该方式，建议使用 Dockerfile 的形式）
-docker commit = docker container commit
+- 根据一个 container 的修改创建新的 image （不推荐使用该方式，建议使用 Dockerfile 的形式）
+
+```
+# docker commit = docker container commit
 docker commit old-container-namae new-image-name
+```
 
-# 查看容器详细信息
+- 查看容器详细信息
+
+```
 # docker inspect = docker contaienr inspect
 docker inspect container-ID
+```
 
-# 查看容器运行时产生的日志
+- 查看容器运行时产生的日志
+
+```
 # docker logs = docker container logs
 docker logs container-ID
 ```
 
 ## docker run 相关操作
+
+- 交互式运行一个 image
+
 ```
-# 交互式运行一个 image
 docker run -it image-name
+```
 
-# 后台执行
+- 后台执行
+
+```
 docker run -d image-name
+```
 
-# 定义名字运行容器
+- 定义名字运行容器
+
+```
 # 定义名字的容器是唯一的
 docker run -d --name=demo image-name
 docker stop demo
 docekr rm demo
 docker start demo
+```
 
-# 类似网络 NDS ，通过名称连接容器之间的网络
+- 类似网络 NDS ，通过名称连接容器之间的网络
+
+```
 docker run -d --name test1 image-name
 dokcer run -d --name test2 --link test1 image-name
+
 # 在 test2 容器中可以直接使用容器 test1 来访问网络
 docker exec -it test2 ping test1
+```
 
-# 启动时指明使用的网络
+- 启动时指明使用的网络
+
+```
 # 新的网络可以通过 docker network create 来创建
 docker run --network network-name image-name
+```
 
-# 端口映射
+- 端口映射
+
+```
 # 将容器的 80 端口映射到 docker 主机的 80 端口
 docker run -p 80:80 image-name
+```
 
-# 设置环境变量
+- 设置环境变量
+
+```
 # 设置 demo 的环境 REDIS_HOST 的值为 redis 容器的 IP 地址
 docker run --name demo --link redis -e REDIS_HOST=redis image-name
+```
 
-# 指定 volume 
+- 指定 volume 
+
+```
 # 在 Dockerfile 中定义 VOLUME ["/var/lib/mysql"]
 # 指定从 mysql 镜像中创建的容器的 volume 在 /var/lib/mysql 中
 docker run -v mysql:/var/lib/mysql --name mysql1 mysql
 ```
 
 ## docker exec 相关操作
+> 可以进入在运行中或停止运行的容器中操作相关的命令
+
+- 交互式进入后执行 /bin/bash 进行命令操作
+
 ```
-# 进入一个运行中的 container 中
-# 交互式进入后执行 /bin/bash 进行命令操作
 docker exec -it container-ID /bin/bash
-# 交互式进入后执行 python 进入 python 解释器
+```
+
+- 交互式进入后执行 python 进入 python 解释器
+
+```
 docker exec -it container-ID python
-# 交互式进入后执行 ip a 查看运行中的容器 IP 地址
+```
+
+- 交互式进入后执行 ip a 查看运行中的容器 IP 地址
+
+```
 docker exec -it container-ID ip a
 ```
+
 ## Dockerfile 语法
 ### FROM 
 > 尽量使用官方的 image 作为 base image （比较安全）
@@ -133,7 +219,7 @@ LABEL description="This is description"
 ```
 
 ### RUN
-> 为了美观，复杂的RUN请用反斜线换行<br>
+> 为了美观，复杂的RUN请用反斜线换行  
 > 避免无用分层，合并多条命令成一行
 
 ```
@@ -150,8 +236,8 @@ RUN /bin/bash -c 'source $HOME/.bashrc; echo $HOME'
 ```
 
 ### WORKDIR
-> 作用类似 cd 命令<br>
-> 用 WORKDIR，不要使用 RUN cd<br>
+> 作用类似 cd 命令  
+> 用 WORKDIR，不要使用 RUN cd  
 > 尽量使用绝对目录
 
 ```
@@ -165,8 +251,8 @@ RUN pwd
 ```
 
 ### ADD and COPY
-> 大部分情况，COPY 优于 ADD<br>
-> ADD 除了 COPY 还有额外的功能（解压）<br>
+> 大部分情况，COPY 优于 ADD  
+> ADD 除了 COPY 还有额外的功能（解压）  
 > 添加远程文件/目录请使用 curl 或者 wget
 
 ```
@@ -199,8 +285,8 @@ RUN apt-get install -y mysql-server="${MYSQL_VERSION}" \
 ```
 
 ### CMD and ENTRYPOINT
-> RUN：执行命令并创建新的 Image Layer<br>
-> CMD：设置容器启动后默认执行的命令和参数<br>
+> RUN：执行命令并创建新的 Image Layer  
+> CMD：设置容器启动后默认执行的命令和参数  
 > ENTRYPOINT：设置容器启动时运行的命令
 
 ```
@@ -251,20 +337,38 @@ EXPOSE 5000
 > 使用 [Docker Registry](https://docs.docker.com/registry/)
 
 ### [基本使用方法](https://docs.docker.com/registry/#basic-commands)
+
+- 从 Docker Hub 拉取官方 registry image
+
 ```
-# 从 Docker Hub 拉取官方 registry image
 docker pull registry
-# 启动一个 registry container
+```
+
+- 启动一个 registry container
+
+```
 docker run -d -p 5000:5000 --restart always --name registry registry:2
-# 从 Docker Hub 拉取一个 ubuntu image
+```
+
+- 从 Docker Hub 拉取一个 ubuntu image
+
+```
 docker pull ubuntu
-# 修改 ubuntu repository 名称为私有 Docker Hub 启动的主机 IP + PORT + / + name
+```
+
+- 修改 ubuntu repository 名称为私有 Docker Hub 启动的主机 IP + PORT + / + name
+
+```
 docker tag ubuntu localhost:5000/ubuntu
-# 推送 image 到私有 Docker Hub 上
+```
+
+- 推送 image 到私有 Docker Hub 上
+
+```
 docker push localhost:5000/ubuntu
 ```
 
-### 校验
+### 验证方法
 ```
 # 删除 localhost:5000/ubuntu 镜像
 docker rmi localhost:5000/ubuntu
@@ -296,41 +400,64 @@ docker run --cpu-shares=5 image-name
 ```
 
 ## docker-machine 操作
+
+- 列出所有 docker 虚拟机
+
 ```
-# 列出所有docker 虚拟机
 docker-machine ls
+```
 
-# 创建一个 docker 虚拟机
+- 创建一个 docker 虚拟机
+
+```
 docker-machine create docker-machine-name
+```
 
-# 启动一个 docker 虚拟机
+- 启动一个 docker 虚拟机
+
+```
 docker-machine start docker-machine-name
+```
 
-# 登录一个 docker 虚拟机
+- 登录一个 docker 虚拟机
+
+```
 docker-machine ssh docker-machine-name
+```
 
-# 删除一个 docker 虚拟机
+-` 删除一个 docker 虚拟机
+
+```
 docker-machine rm docker-machine-name
 ```
 
 ## docker network
-```
-# 显示本机所有的 docker 网络
-docke network ls
 
-# 显示使用对应 docker 网络的容器
+- 显示本机所有的 docker 网络
+
+```
+docke network ls
+```
+
+- 显示使用对应 docker 网络的容器
+
+```
 docker network inspect docker-network-id/docker-nwtwork-name
 ```
 
 ### bridge 网络
 > 连接到自己创建的 bridge 网络中的容器，默认已经相互 link，可以直接使用容器名称来访问
 
+- 创建一个 docker birdge 网咯
+
 ```
-# 创建一个 docker birdge 网咯
 # docker network create -d 驱动名称 新的网络名称
 docker  network create -d bridage my-bridage
+```
 
-# 将容器连接到指定的网络
+- 将容器连接到指定的网络
+
+```
 docker network connect network-name container-name
 ```
 
@@ -351,23 +478,32 @@ docker run --network host image-name
 ```
 
 ### overlay 网络 - 实现多机通信
-> 该网络基于 VXLAN 方式实现类似隧道的功能
-
-使用 overlay 网络加分布式存储 etcd 实现
+> 该网络基于 VXLAN 方式实现类似隧道的功能  
+> 使用 overlay 网络加分布式存储 etcd 实现
 
 ## 持久化存储和数据共享
 ### 持久化数据的方案
 #### 基于本地文件系统的 volume
+> 受管理的 data volume，由 docker 后台自动创建  
+> 绑定挂载的 volume，具体挂载位置可以由用户指定
+
 可以在执行 Docker create 或 Docker run 时，通过 -v 参数将主机的目录作为容器的数据卷。这部分功能便是基于本地文系统的 volume 管理
-* 受管理的 data volume，由 docker 后台自动创建
-* 绑定挂载的 volume，具体挂载位置可以由用户指定
+
+- 查看所有 docker 管理的 volume
 
 ```
-# 查看所有 docker 管理的 volume
 docker volume ls
-# 删除一个 volume
+```
+
+- 删除一个 volume
+
+```
 docker volume rm volume-name
-# 查看 volume 详细信息
+```
+
+- 查看 volume 详细信息
+
+```
 docker volume inspect volume-name
 ```
 
@@ -395,12 +531,12 @@ docker run -v /home/aaa:/root/aaa image-name
 #### 基于 plugin 的 volume
 支持第三方的存储方案，比如 NAS，aws
 
-## docker-compose 相关操作 - 默认使用 docker-compose.yml 文件名
+## docker-compose 相关操作 - 默认识别 docker-compose.yml 文件名
 - Docker Compose 是一个工具  
 - 这个工具可以通过一个 yml 文件定义多容器的 docker 应用  
 - 通过一条命令就可以根据 yml 文件的定义去创建或者管理这个多容器  
 
-### yml 文件编写规则
+### docker-compse.yml 文件语法
 #### Services
 > 一个 services 代表一个 container，这个 container 可以从 dockerhub 的 image 来创建，或者从本地的 Dockerfile build 出来的 image 来创建  
 >  Service 的启动类似 container run，我们可以给其指定 network 和 volume，所以可以给 service 指定 network 和 volume 的应用  
@@ -482,26 +618,42 @@ networks:
     driver: bridge
 ```
 
-### docker-compose 命令行工具使用方法
+### docker-compose 命令行工具
 > 用于本地开发，不适用于生产环境
 
+- 前台启动 container
+
 ```
-# 前台启动 container
 docker-compose up
+```
 
-# 后台启动 container
+- 后台启动 container
+
+```
 docker-compose up -d
+```
 
-# 删除停止的 container
+-删除停止的 container
+
+```
 docker-compose down
+```
 
-# 查看运行的 docker compose
+- 查看运行的 docker compose
+
+```
 docker-compose ps
+```
 
-# 指定启动容器的个数
+- 指定启动容器的个数
+
+```
 docker-compose up --scale container-name=num
+```
 
-# 预构建 Dockerfile 
+- 预构建 Dockerfile 
+
+```
 docker-compose build
 ```
 
@@ -518,40 +670,62 @@ docker-compose build
 > 先初始化 manager 节点  
 > worker 节点使用生成的 token 进行添加
 
+- 进入 manager 节点创建 swarm manager
+
 ```
-# 进入 manager 节点创建 swarm manager
 docker swarm init --advertise-addr=swarm-manager-ip-addr
+```
 
-# 进入 worker 节点加入 swarm manager
+- 进入 worker 节点加入 swarm manager
+
+```
 docker swarm join --token swarm-manager-join-token swarm-mananger-ip:swarm-manager-port
+```
 
-# 在 manager 节点管理 join token
+- 在 manager 节点管理 join token
+
+```
 docker swarm join-token manager 
 ```
 
 ### node 命令
+
+- 显示当前 swarm 节点
+
 ```
-# 显示当前 swarm 节点
 docker node ls
 ```
 
 ### service 命令
 > 在 swarm 模式下一般不用 run 而使用 service
 
+- 创建一个 service，及运行一个 container 并运行
+
 ```
-# 创建一个 service，及运行一个 container 并运行
 docker service create --name demo iamge
+```
 
-# 查看 service
+- 查看 service
+
+```
 docker service ls
+```
 
-# 删除 service
+- 删除 service
+
+```
 docker service rm service-name
+```
 
-# 查看具体 service 内容
+- 查看具体 service 内容
+
+```
 docker service ps service-name
+```
 
-# 扩展 service
+- 扩展 service
+
+```
 docker service scale service-name=num
 ```
 
@@ -604,23 +778,34 @@ deploy:
 ### docker stack 部署 docker-compose.yml
 > stack 一次性启动多个 service
 
+- 启动stack
+
 ```
-# 启动stack
 # -c == -compose-file
 docker stack deploy stack-name --compose-file=docker-compose.yml
+```
 
-# 查看所有 stack
+- 查看所有 stack
+
+```
 docker stack ls
+```
 
-# 查看具体的 stack 运行详情
+- 查看具体的 stack 运行详情
+
+```
 docker stack ps stack-name
+```
 
-# 查看概括的 service 运行情况
+- 查看概括的 service 运行情况
+
+```
 docker stack service stack-name
 ```
 
 ### update service
-#### 单个 service 更新
+#### 单个 service 更新步骤
+
 ```
 docker service create -d --name server -p 8080:5000 image-name:1.0
 
@@ -656,24 +841,37 @@ services:
 - 在 container 内部 Secret 看起来像文件，但是实际是在内存中
 
 ### secret 管理
+
+- 创建 secret - 文件方式
+
 ```
-# 创建 secret - 文件方式
 docker secret create secret-name secret-file
+```
 
-# 创建 secret - 命令行 echo 方式
+- 创建 secret - 命令行 echo 方式
+
+```
 echo "passwod" | docker secret create secret-name -
+```
 
-# 查看 secret - 源文件删除了也可以查看到
+- 查看 secret - 源文件删除了也可以查看到
+
+```
 docker secret ls
 ```
 
 ### 使用生成的 secret
+
+- 创建 service 时指明 sercet
+
 ```
-# 创建 service 时指明 sercet
 # 在容器中 /run/secrets/ 中存放传入的 secret
 docker service create --secret secret-name iamge-name
+```
 
-# 在 docker-compose.yml 文件中使用
+- 在 docker-compose.yml 文件中使用
+
+```
 # 前提是已经创建了 secret
 services:
   app:
@@ -682,8 +880,11 @@ services:
 	  - secret-name
     environment:
 	  SECRET_DEMO:/run/secrets/secret-name
+```
 
-# 在 docker-compose.yml 文件中创建和使用
+- 在 docker-compose.yml 文件中创建和使用
+
+```
 # 不太推荐使用，相对上面一种安全性较低
 services:
   app:
